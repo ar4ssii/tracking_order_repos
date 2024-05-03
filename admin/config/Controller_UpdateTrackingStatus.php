@@ -1,15 +1,25 @@
 <?php
 session_start();
 include 'dbcon.php';
+date_default_timezone_set('Asia/Manila');
+
 
 if (isset($_POST['btn_updateStatus'])) {
     $hiddenID = $_POST['hiddenID'];
     $UpdatedStatus = $_POST['UpdatedStatus'];
     $FromPost = $_POST['FromPost'];
     $ToPost = $_POST['ToPost'];
-    // , PostLocationID = $FromPost, DestinationPostID =  $ToPost
-    $sql_UpdateStatus = "UPDATE tbl_trackinginformation SET TrackingStatusID = $UpdatedStatus, PostLocationID = $FromPost, DestinationPostID =  $ToPost WHERE TrackingID = '$hiddenID'";
+
+    // Calculate delivery date (current date + 4 days) only if UpdatedStatus is 2
+    if ($UpdatedStatus == 2) {
+        $DeliveryDate = date('Y-m-d H:i:s', strtotime('+4 days'));
+        $sql_UpdateStatus = "UPDATE tbl_trackinginformation SET TrackingStatusID = $UpdatedStatus, PostLocationID = $FromPost, DestinationPostID =  $ToPost, DeliveryDate = '$DeliveryDate' WHERE TrackingID = '$hiddenID'";
+    } else {
+        $sql_UpdateStatus = "UPDATE tbl_trackinginformation SET TrackingStatusID = $UpdatedStatus, PostLocationID = $FromPost, DestinationPostID =  $ToPost WHERE TrackingID = '$hiddenID'";
+    }
+
     $result = $conn->query($sql_UpdateStatus);
+
     if ($result === true) {
         $_SESSION['ActivateAlert'] = true;
         $_SESSION['AlertColor'] = "alert-success";
@@ -19,9 +29,12 @@ if (isset($_POST['btn_updateStatus'])) {
         $_SESSION['AlertColor'] = "alert-danger";
         $_SESSION['AlertMsg'] = "Status update failed";
     }
+
+    // Redirect to the track-details page
     header('location: ../track-details.php?id=' . $hiddenID);
     exit();
 }
+
 
 if (isset($_POST['btn_deliver'])) {
     $KeyID = $_POST['KeyID'];

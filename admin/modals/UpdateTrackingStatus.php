@@ -15,7 +15,7 @@
                                 <td class="tr-title">Set Status to: </td>
                                 <td>
                                     <select class="form-select" name="UpdatedStatus" aria-label="">
-                                        <option selected value="<?= $row['TrackingStatusID'] ?>"><?= $row['Status'] ?></option>
+                                        <option selected disabled value="<?= $row['TrackingStatusID'] ?>"><?= $row['Status'] ?></option>
                                         <?php
                                         $keyTrackingStatusID = $row['TrackingStatusID'];
                                         $sql_selectStatus = "SELECT * FROM tbl_trackingstatus WHERE TrackingStatusID != $keyTrackingStatusID";

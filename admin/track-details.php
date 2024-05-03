@@ -50,6 +50,12 @@ include "page-includes/navbar.php";
                                 <td class="tr-title">Initial Tracking Date:</td>
                                 <td><?= date('m/d/Y H:i', strtotime($row['InitialDate'])) ?></td>
                             </tr>
+                            <?php if($row['DeliveryDate'] != NULL){ ?>
+                            <tr>
+                                <td class="tr-title">Estimated Delivery Date:</td>
+                                <td><?= date('m/d/Y', strtotime($row['DeliveryDate'])) ?></td>
+                            </tr>
+                            <?php } ?>
 
                             <tr>
                                 <td class="tr-title">Tracking Status:</td>

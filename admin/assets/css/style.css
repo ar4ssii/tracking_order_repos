@@ -320,3 +320,9 @@ body {
 .green {
     color: green;
 }
+
+.add-button-container {
+    position: fixed;
+    bottom: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+}

@@ -42,6 +42,19 @@
       <li>
         <a href="products.php">Products</a>
       </li>
+
     </ul>
   </div>
+
+  <!-- employees -->
+  <a href="employee_management.php" class="nav-link d-flex align-items-center">
+    <i class="fa-solid fa-users"></i>
+    <p class="my-2 px-2">Employee Management</p>
+  </a>
+
+  <!-- sales -->
+  <a href="sales.php" class="nav-link d-flex align-items-center">
+    <i class="fa-solid fa-peso-sign"></i>
+    <p class="my-2 px-2">Sales Report</p>
+  </a>
 </div>
