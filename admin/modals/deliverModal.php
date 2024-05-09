@@ -31,23 +31,26 @@
                             </tr>
                             <tr>
                                 <td>Total Amount:</td>
-                                <td><?= '₱ '. $row['total_amount'] ?></td>
+                                <td><?= '₱ ' . number_format($row['Amount'] + $row['transaction_fee'], 2) ?></td>
+                            </tr>
+                            <tr>
+                                <td>Payment Method:</td>
+                                <td><?= $row['Type'] ?></td>
                             </tr>
                             <tr>
                                 <td>Amount Paid:</td>
                                 <td><input type="text" class="form-control" placeholder="enter exact amount" name="Amount"></td>
                             </tr>
-                            <tr>
-                                <td class="tr-title">
-                                    Will be delivered by:
-                                </td>
-                                <td>
-                                    <select class="form-select" disabled name="Rider" aria-label="">
-                                        <option value="">Rider 1</option>
-                                        <option value="">Rider 2</option>
-                                    </select>
-                                </td>
-                            </tr>
+                            <?php if ($_SESSION['user_info']['role'] == 3) { ?>
+                                <tr>
+                                    <td class="tr-title">
+                                        Will be delivered by:
+                                    </td>
+                                    <td>
+                                        <?= $_SESSION['user_info']['FullName'] .'('. $_SESSION['user_info']['role_name'] .')'?>
+                                      </td>
+                                </tr>
+                            <?php } ?>
                         </table>
                     </div>
 

@@ -1,5 +1,6 @@
 <?php
 include 'customer-template/header.php';
+include 'customer-validation/customer-validation.php';
 include 'customer-template/navbar.php';
 ?>
 
@@ -109,7 +110,7 @@ include 'customer-template/navbar.php';
                         <div class="accordion-body">
                             <?php if (isset($_SESSION['auth'])) { ?>
                                 <label for="" class="text-capitalize">Customer's Name</label>
-                                <input type="text" name="hiddenCustomerId" value="<?= $_SESSION['user_info']['id'];?>">
+                                <input type="hidden" name="hiddenCustomerId" value="<?= $_SESSION['user_info']['id'];?>">
                                 <input type="text" aria-label="Name" required name="customer_name" readonly value="<?= $_SESSION['user_info']['name'];?>" placeholder="Enter your full name" class="form-control">
 
                                 <label for="" class="text-capitalize">Customer's Mobile Number</label>
@@ -145,7 +146,8 @@ include 'customer-template/navbar.php';
                             </tr>
 
                             <?php
-                            $total_amount = 0;
+                            $order_amount = 0;
+                            $transaction_fee = 0;
                             if (!empty($_SESSION['cart'])) {
                                 $count = 1;
                                 foreach ($_SESSION['cart'] as $product_id => $quantity) {
@@ -155,7 +157,12 @@ include 'customer-template/navbar.php';
 
                                     // Calculate total price for this product (price * quantity)
                                     $subtotal = $product_details['price'] * $quantity;
-                                    $total_amount += $subtotal;
+                                    $order_amount += $subtotal;
+
+                                    // calculate transaction fee
+                                    $transaction_fee_subtotal = $product_details['net_weight_in_kg'] * $quantity;
+                                    $transaction_fee += $transaction_fee_subtotal;
+                                    
                             ?>
                                     <tr>
                                         <td><?= $count++ ?></td>
@@ -177,15 +184,23 @@ include 'customer-template/navbar.php';
 
                             ?>
                             <tr class="fw-bold">
-                                <td class="text-end" colspan="4">Total Amount:</td>
-                                <td colspan="2"><?= '₱ ' . $total_amount ?></td>
+                                <td class="text-end" colspan="3">Order Amount:</td>
+                                <td colspan="3"><?= '₱ ' . $order_amount ?></td>
                             </tr>
                             <tr class="fw-bold">
-                                <td class="text-end" colspan="4">Select Payment Method</td>
-                                <td>
+                                <td class="text-end" colspan="3">Transaction Fee:</td>
+                                <td colspan="3"><?= '₱ ' . TransactionFee($transaction_fee) ?></td>
+                            </tr>
+                            <tr class="fw-bold">
+                                <td class="text-end" colspan="3">Total Amount:</td>
+                                <td colspan="3"><?= '₱ ' . ($order_amount + TransactionFee($transaction_fee)) ?></td>
+                            </tr>
+                            <tr class="fw-bold">
+                                <td class="text-end" colspan="3">Select Payment Method</td>
+                                <td colspan="3">
                                     <select name="PaymentType" id="" class="form-select">
                                         <option value="COD">CASH ON DELIVERY</option>
-                                        <option value="GCASH">GCASH</option>
+                                        
                                     </select>
                                 </td>
                             </tr>
@@ -193,7 +208,8 @@ include 'customer-template/navbar.php';
                     </table>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <input type="hidden" name="total_amount" value="<?= $total_amount ?>" id="">
+                    <input type="hidden" name="order_amount" value="<?= $order_amount ?>" id="">
+                    <input type="hidden" name="transaction_fee" value="<?= TransactionFee($transaction_fee) ?>" id="">
                     <input type="hidden" name="order_date" value="<?= $DateNow ?>">
                     <button class="btn btn-warning <?php if (empty($_SESSION['cart'])) {
                                                         echo "disabled";
@@ -209,5 +225,28 @@ include 'customer-template/navbar.php';
 
 </div>
 
+<?php 
+function TransactionFee($transaction_fee)
+{
+    $equivalent_fee = 0;
+    
+    if($transaction_fee == 0){
+        $equivalent_fee = 0;
+    }
+    elseif ($transaction_fee > 0 && $transaction_fee <= 3.0) {
+        $equivalent_fee = 80.00;
+    } elseif ($transaction_fee > 3.0 && $transaction_fee <= 5.0) {
+        $equivalent_fee = 100.00;
+    } elseif ($transaction_fee > 5.0 && $transaction_fee <= 10.0) {
+        $equivalent_fee = 120.00;
+    } elseif ($transaction_fee > 10.0 && $transaction_fee <= 20.0) {
+        $equivalent_fee = 400.00;
+    } else {
+        $equivalent_fee = 0;
+    }
+    return $equivalent_fee;
+}
+
+?>
 
 <?php include 'customer-template/footer.php'; ?>

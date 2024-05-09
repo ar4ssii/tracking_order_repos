@@ -67,6 +67,9 @@ body {
     transition: background-color 0.3s ease;
 }
 
+.sidenav #logout:hover a {
+    color: white!important;
+}
 
 /* Position the icon at the bottom left corner */
 .bottom-icon {
@@ -321,8 +324,6 @@ body {
     color: green;
 }
 
-.add-button-container {
-    position: fixed;
-    bottom: 20px; /* Adjust as needed */
-    right: 20px; /* Adjust as needed */
+.system-time-font{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
 }

@@ -10,9 +10,12 @@ function sanitizeInput($input)
 }
 
 // Fetch data from database
-$sql_FetchTracks = "SELECT tti.*, ts.Status 
+$sql_FetchTracks = "SELECT tti.*, ts.Status, o.customer_id, c.name, c.address
 FROM tbl_trackinginformation tti
 INNER JOIN tbl_trackingstatus ts ON tti.TrackingStatusID = ts.TrackingStatusID 
+INNER JOIN orders o ON o.order_id = tti.orderID
+INNER JOIN customers c ON c.customer_id = o.customer_id
+
 ";
 $result = mysqli_query($conn, $sql_FetchTracks);
 ?>
@@ -55,8 +58,12 @@ $result = mysqli_query($conn, $sql_FetchTracks);
                         $search = sanitizeInput($_GET['search']);
                         $sql_FetchTracks .= " WHERE tti.TrackingNumber LIKE '%$search%'
                                             OR ts.Status LIKE '%$search%'
-                                            OR tti.InitialDate LIKE '%$search%' ORDER BY tti.InitialDate DESC "; // Add more columns as needed
+                                            OR c.name LIKE '%$search%'
+                                            OR c.address LIKE '%$search%'
+                                            OR tti.InitialDate LIKE '%$search%'"; // Add more columns as needed
                     }
+                    // Add ORDER BY clause
+                    $sql_FetchTracks .= " ORDER BY `tti`.`InitialDate` DESC";
                     $result = mysqli_query($conn, $sql_FetchTracks);
 
                     if (mysqli_num_rows($result) > 0) {

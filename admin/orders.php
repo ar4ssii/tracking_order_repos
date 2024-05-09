@@ -1,5 +1,6 @@
 <?php
 include "template/header.php";
+include 'validation/rider-validation.php';
 include "page-includes/sidebar.php";
 include "page-includes/navbar.php";
 
@@ -55,8 +56,9 @@ $result = mysqli_query($conn, $sql_FetchOrder);
                                             OR address LIKE '%$search%'
                                             OR order_date LIKE '%$search%'
                                             OR delivery_address LIKE '%$search%'
-                                            ORDER BY order_date DESC "; // Add more columns as needed
+                                            "; // Add more columns as needed
                     }
+                    $sql_FetchOrder .=" ORDER BY order_date DESC ";
                     $result = mysqli_query($conn, $sql_FetchOrder);
 
                     if (mysqli_num_rows($result) > 0) {

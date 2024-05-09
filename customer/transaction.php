@@ -1,5 +1,6 @@
 <?php
 include 'customer-template/header.php';
+include 'customer-validation/customer-validation.php';
 include 'customer-template/navbar.php';
 ?>
 <div class="container-fluid py-5 bg-light">
@@ -56,7 +57,7 @@ include 'customer-template/navbar.php';
                         ?>
                             <tr>
                                 <td><?= $rowNum ?></td>
-                                <td><?= $row['order_date'] ?></td>
+                                <td><?= date('F j, Y g:i a', strtotime($row['order_date'])) ?></td>
                                 <td><?= 'OR' . $row['order_id'] ?></td>
                                 <td><?= $row['status'] ?></td>
                                 <td><a href="transaction-details.php?id=<?= $row['order_id'] ?>" type="button" class="btn btn-info">View Details</a></td>

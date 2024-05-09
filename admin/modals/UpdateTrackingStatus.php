@@ -50,7 +50,7 @@
                                     Will be going to:
                                 </td>
                                 <td>
-                                    <select class="form-select" name="ToPost" aria-label="">
+                                    <select class="form-select" name="ToPost" required aria-label="">
                                         <option selected value="<?= $row['DestinationPostID'] ?>"><?= $row['DestinationPostName'] ?></option>
                                         <?php
                                         $DestinationPostID = $row['DestinationPostID'];

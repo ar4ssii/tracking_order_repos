@@ -10,10 +10,11 @@ function sanitizeInput($input)
 }
 
 // Fetch data from database
-$sql_FetchTracks = "SELECT tti.*, ts.Status, o.total_amount,o.order_id
+$sql_FetchTracks = "SELECT tti.*,pm.*, ts.Status, o.order_id
 FROM tbl_trackinginformation tti
 INNER JOIN tbl_trackingstatus ts ON tti.TrackingStatusID = ts.TrackingStatusID
 INNER JOIN orders o ON tti.OrderID = o.order_id
+INNER JOIN payment_method pm ON pm.order_id = o.order_id
 WHERE tti.TrackingStatusID = 4
 ";
 $result = mysqli_query($conn, $sql_FetchTracks);

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '..\..\config\dbcon.php';
+include '..\..\admin\config\dbcon.php';
 
 if (isset($_POST['btn-login'])) {
 
@@ -22,6 +22,7 @@ if (isset($_POST['btn-login'])) {
 
         // Store user information in session
         $_SESSION['user_info'] = [
+            'role' => $row['login_role_id'],
             'id' => $row['customer_id'],
             'name' => $row['name'],
             'contact_information' => $row['contact_information'],

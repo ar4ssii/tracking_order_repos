@@ -1,5 +1,6 @@
 <?php
 include "template/header.php";
+include 'validation/employee-validation.php';
 include "page-includes/sidebar.php";
 include "page-includes/navbar.php";
 
@@ -287,6 +288,7 @@ if (isset($_SESSION['form_values'])) {
     </div>
 </div>
 
+<!-- birthday js -->
 <script src="assets/js/birthday.js"></script>
 
 <?php

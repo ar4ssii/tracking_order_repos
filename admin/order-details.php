@@ -1,18 +1,21 @@
 <?php
 include "template/header.php";
+include 'validation/rider-validation.php';
 include "page-includes/sidebar.php";
 include "page-includes/navbar.php";
 
 // Check if the 'id' parameter is set in the URL
 if (isset($_GET['id'])) {
     $getID = $_GET['id'];
-    $sql_fetchOrderDetails = "SELECT o.*, c.*, c.name as customerName, oi.*, p.*
+    $sql_fetchOrderDetails = "SELECT o.*, c.*, pm.*, c.name as customerName, oi.*, p.*
                                     FROM 
                                         orders o
                                     INNER JOIN 
                                         customers c ON o.customer_id = c.customer_id
                                     INNER JOIN 
                                         order_item oi ON o.order_id = oi.order_id
+                                        INNER JOIN 
+                                        payment_method pm ON o.order_id = pm.order_id
                                     INNER JOIN 
                                         product p ON oi.product_id = p.product_id WHERE o.order_id = $getID";
 
@@ -84,6 +87,14 @@ if (isset($_GET['id'])) {
                                 <tr>
                                     <td class="tr-title">Total Amount of Order:</td>
                                     <td>₱<?= number_format($totalAmount, 2) ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="tr-title">Transaction Fee:</td>
+                                    <td>₱<?= number_format($order['transaction_fee'], 2) ?></td>
+                                </tr>
+                                <tr class="fw-bold">
+                                    <td class="tr-title">Total Amount:</td>
+                                    <td>₱<?= number_format($totalAmount + $order['transaction_fee'], 2) ?></td>
                                 </tr>
                             </tbody>
                         </table>

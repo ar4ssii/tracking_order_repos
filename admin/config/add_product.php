@@ -8,9 +8,10 @@ if (isset($_POST['add_product'])) {
     $product_desc = $_POST['product_desc'];
     $product_price = $_POST['product_price'];
     $product_stocks = $_POST['product_stocks'];
+    $net_weight_in_kg = $_POST['net_weight_in_kg'];
 
-    $sql_addProduct = "INSERT INTO product(name, description, price, quantity_in_stock) 
-                    VALUES('$product_name','$product_desc',$product_price,$product_stocks)";
+    $sql_addProduct = "INSERT INTO product(name, description, price, quantity_in_stock,net_weight_in_kg) 
+                    VALUES('$product_name','$product_desc',$product_price,$product_stocks,$net_weight_in_kg)";
     $result = $conn->query($sql_addProduct);
     if ($result === true) {
         $_SESSION['ActivateAlert'] = true;

@@ -1,6 +1,6 @@
 <?php
 session_start(); // Include necessary files and initialize session
-include '..\..\config\dbcon.php';
+include '..\..\admin\config\dbcon.php';
 
 
 // Check if the form is submitted
@@ -9,7 +9,7 @@ if (isset($_POST['btn_place_order'])) {
     $customer_address = $_SESSION['user_info']['address'];
     $customer_name = $_SESSION['user_info']['name'];
     $order_date = $_POST['order_date'];
-    $total_amount = $_POST['total_amount'];
+    $order_amount = $_POST['order_amount'];
 
     // Get the cart items from the session
     $cart = $_SESSION['cart'];
@@ -24,9 +24,9 @@ if (isset($_POST['btn_place_order'])) {
     // $customer_id = $stmt_customer->insert_id;
 
     // Insert order details into the orders table
-    $sql_order = "INSERT INTO orders (customer_id, order_date,delivery_address,total_amount) VALUES (?, ?, ?, ?)";
+    $sql_order = "INSERT INTO orders (customer_id, order_date,delivery_address) VALUES (?, ?, ?)";
     $stmt_order = $conn->prepare($sql_order);
-    $stmt_order->bind_param("isss", $hiddenCustomerId, $order_date, $customer_address, $total_amount);
+    $stmt_order->bind_param("iss", $hiddenCustomerId, $order_date, $customer_address);
     $stmt_order->execute();
 
     // Get the newly inserted order ID
@@ -84,14 +84,14 @@ if (isset($_POST['btn_place_order'])) {
 
 
         // Insert data into the payment_method table
-        $sql_payment_method = "INSERT INTO payment_method (name, order_id, Amount, Type) VALUES (?,?, ?, ?)";
+        $sql_payment_method = "INSERT INTO payment_method (name, order_id, Amount,transaction_fee, Type) VALUES (?,?, ?,?, ?)";
         $stmt_payment_method = $conn->prepare($sql_payment_method);
 
         // Assuming you have a placeholder for the amount and type, you can set them to NULL initially
-        $amount = null; // Set this to the appropriate amount if you have it
+        $transaction_fee = $_POST['transaction_fee']; // Set this to the appropriate amount if you have it
         $type = $_POST['PaymentType']; // Set this to the appropriate type
 
-        $stmt_payment_method->bind_param("sids", $customer_name, $hiddenCustomerId, $amount, $type);
+        $stmt_payment_method->bind_param("sidds", $customer_name, $order_id, $order_amount,$transaction_fee, $type);
         $stmt_payment_method->execute();
 
         // Check if the payment method insertion was successful

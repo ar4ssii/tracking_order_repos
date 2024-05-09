@@ -1,7 +1,34 @@
 <?php
 include "template/header.php";
+include 'validation/rider-validation.php';
 include "page-includes/sidebar.php";
 include "page-includes/navbar.php";
+
+// Execute SQL query to fetch sales data with month and sum of sales by month
+$sql = "SELECT MONTH(o.order_date) AS OrderMonth, SUM(pm.Amount + pm.transaction_fee) AS TotalSales 
+        FROM payment_method pm
+        INNER JOIN tbl_trackinginformation tti ON tti.OrderID = pm.order_id
+        INNER JOIN orders o ON o.order_id = pm.order_id
+        WHERE tti.TrackingStatusID = 5
+        GROUP BY MONTH(o.order_date)";
+
+$result = mysqli_query($conn, $sql);
+
+// Initialize arrays for sales labels and data
+$salesLabels = [];
+$salesData = [];
+
+// Populate sales labels and data arrays
+if (mysqli_num_rows($result) > 0) {
+  while ($row = mysqli_fetch_assoc($result)) {
+    // Get the month name from the numeric month
+    $monthName = date("F", mktime(0, 0, 0, $row['OrderMonth'], 1));
+    $salesLabels[] = $monthName;
+
+    // Store total sales for each month
+    $salesData[] = $row['TotalSales'];
+  }
+}
 ?>
 
 <!-- Page content -->
@@ -11,44 +38,21 @@ include "page-includes/navbar.php";
     <div class="col mx-4">
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
 
-        <?php
-        // Execute query to count occurrences of each status
-        $sql_countStatus = "SELECT ts.Status, COUNT(*) AS count FROM tbl_trackinginformation tti
-                            INNER JOIN tbl_trackingstatus ts ON tti.TrackingStatusID = ts.TrackingStatusID
-                            GROUP BY ts.Status";
-        $result_countStatus = mysqli_query($conn, $sql_countStatus);
-
-        // Associative array to store counts of each status
-        $statusCounts = array();
-
-        // Populate status counts array
-        if (mysqli_num_rows($result_countStatus) > 0) {
-          while ($row = mysqli_fetch_assoc($result_countStatus)) {
-            $statusCounts[$row['Status']] = $row['count'];
-          }
-        }
-        // Function to get count of a status from the status counts array
-        function getStatusCount($status)
-        {
-          global $statusCounts;
-          return isset($statusCounts[$status]) ? $statusCounts[$status] : 0;
-        }
-        ?>
-
-        <div class="col">
-          <div class="card h-100 shadow border-warning-left">
-            <div class="row m-0 py-3 align-items-center">
-              <div class="col-4">
-                <i class="fa-solid fa-clock display-3 text-warning"></i>
-              </div>
-              <div class="col-8 text-end">
-                <h1 class="display-2 text-warning"><?php echo getStatusCount('PENDING'); ?></h1>
-                <p class="text-uppercase">Pending FOR Approval</p>
+        <a href="track.php" style="text-decoration: none;">
+          <div class="col">
+            <div class="card h-100 shadow border-warning-left">
+              <div class="row m-0 py-3 align-items-center">
+                <div class="col-4">
+                  <i class="fa-solid fa-clock display-3 text-warning"></i>
+                </div>
+                <div class="col-8 text-end">
+                  <h1 class="display-2 text-warning"><?php echo getStatusCount('PENDING'); ?></h1>
+                  <p class="text-uppercase">Pending FOR Approval</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-
+        </a>
         <div class="col">
           <div class="card h-100 shadow border-info-left">
             <div class="row m-0 py-3 align-items-center">
@@ -113,7 +117,7 @@ include "page-includes/navbar.php";
               </div>
               <div class="col-8 text-end">
                 <h1 class="display-2 text-danger"><?php echo getStatusCount('RETURNED'); ?></h1>
-                <p class="text-uppercase">returned/cancelled</p>
+                <p class="text-uppercase">returned/ cancelled</p>
               </div>
             </div>
           </div>
@@ -122,7 +126,91 @@ include "page-includes/navbar.php";
       </div>
     </div>
   </div>
+  <div class="container-fluid py-3">
+    <div class="col mx-4">
+      <!-- charts -->
+      <div class="chart">
+        <div class="row">
+          <div class="col-lg-6 pr-lg-2 chart-grid">
+            <div class="card shadow text-center card_border">
+              <div class="card-header chart-grid__header">
+                Sales Chart
+              </div>
+              <div class="card-body">
+                <!-- bar chart -->
+                <div id="container">
+                  <canvas id="salesChart" width="400" height="200"></canvas>
+                </div>
+                <!-- //bar chart -->
+              </div>
+
+            </div>
+          </div>
+          <!-- //charts -->
+
+          <?php
+          $sql_countOrders = "SELECT COUNT(*) AS count FROM orders";
+          $result_countOrders = mysqli_query($conn, $sql_countOrders);
+
+          // Check if there are any rows returned
+          if (mysqli_num_rows($result_countOrders) > 0) {
+            // Fetch the result row
+            $countOrders = mysqli_fetch_assoc($result_countOrders);
+          ?>
+            <div class="col-lg-6 pl-lg-2 chart-grid">
+              <a href="orders.php" style="text-decoration: none;">
+                <div class="card shadow text-center card_border">
+                  <div class="card-header chart-grid__header">
+                    Total Orders
+                  </div>
+                  <div class="card-body">
+                    <h1 class="display-2"><?php echo $countOrders['count']; ?></h1>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+          <?php }
+          ?>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Sales data from PHP
+  const salesLabels = <?php echo json_encode($salesLabels); ?>;
+  const salesData = <?php echo json_encode($salesData); ?>;
+
+  // Sales data
+  const salesChartData = {
+    labels: salesLabels,
+    datasets: [{
+      label: 'Sales',
+      data: salesData,
+      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      borderColor: 'rgba(54, 162, 235, 1)',
+      borderWidth: 1
+    }]
+  };
+
+  // Bar chart configuration
+  const ctx = document.getElementById('salesChart').getContext('2d');
+  const salesChart = new Chart(ctx, {
+    type: 'bar',
+    data: salesChartData,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
 
 <?php
 include "template/footer.php";

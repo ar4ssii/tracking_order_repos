@@ -27,7 +27,33 @@
         }
     });
 
-    // progress bar --------------------------------------------------------------------------------------
+     // \\user button js --------------------------------------------------------------------------
+     const userButton = document.getElementById('userButton');
+    const userAccordion = document.getElementById('userAccordion');
+
+    // Add click event listener to the button
+    userButton.addEventListener('click', function() {
+        // Toggle the display property of the accordion body
+        if (userAccordion.style.display === 'block') {
+            userAccordion.style.display = 'none';
+        } else {
+            userAccordion.style.display = 'block';
+        }
+    });
+    
+    // \\user button js --------------------------------------------------------------------------
+    const financeButton = document.getElementById('financeButton');
+    const financeAccordion = document.getElementById('financeAccordion');
+
+    // Add click event listener to the button
+    financeButton.addEventListener('click', function() {
+        // Toggle the display property of the accordion body
+        if (financeAccordion.style.display === 'block') {
+            financeAccordion.style.display = 'none';
+        } else {
+            financeAccordion.style.display = 'block';
+        }
+    });
     
 </script>
 </body>

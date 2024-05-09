@@ -1,7 +1,10 @@
 <?php
 include "template/header.php";
+include 'validation/employee-validation.php';
 include "page-includes/sidebar.php";
 include "page-includes/navbar.php";
+
+
 
 // Function to sanitize user input
 function sanitizeInput($input)
@@ -29,7 +32,8 @@ $result = mysqli_query($conn, $sql_FetchProducts);
         <div class="alert <?= $_SESSION['AlertColor'] ?> fade show" role="alert">
             <?= $_SESSION['AlertMsg'] ?>
         </div>
-    <?php } unset($_SESSION['AlertMsg']); ?>
+    <?php }
+    unset($_SESSION['AlertMsg']); ?>
     <div class="container-fluid bg-light p-3 border">
         <h3 class="text-center">Products</h3>
         <div class="row d-flex justify-content-center">
@@ -57,6 +61,7 @@ $result = mysqli_query($conn, $sql_FetchProducts);
                         <th>Description</th>
                         <th>Price</th>
                         <th>Available Stocks</th>
+                        <th>Net Weight</th>
                         <th colspan="">Action</th>
                     </tr>
                 </thead>
@@ -68,7 +73,8 @@ $result = mysqli_query($conn, $sql_FetchProducts);
                             <td><input type="text" name="product_desc" placeholder="product description" class="form-control"></td>
                             <td><input type="number" name="product_price" placeholder="product price per qty" class="form-control"></td>
                             <td><input type="number" name="product_stocks" placeholder="product stock number" class="form-control"></td>
-                            <td colspan=""><button class="btn btn-success" name="add_product">Add Product</button></td>
+                            <td><input type="text" name="net_weight_in_kg" placeholder="ex: 0.5kg" class="form-control"></td>
+                            <td colspan=""><button class="btn btn-success" name="add_product"><i class="fa fa-add"></i></button></td>
                         </tr>
                     </form>
                     <?php
@@ -84,9 +90,9 @@ $result = mysqli_query($conn, $sql_FetchProducts);
                                     <td><input type="text" name="product_desc" value="<?= $row['description'] ?>" class="form-control"></td>
                                     <td><input type="text" name="product_price" value="<?= $row['price'] ?>" class="form-control"></td>
                                     <td><input type="text" name="product_stocks" value="<?= $row['quantity_in_stock'] ?>" class="form-control"></td>
-                                    
+                                    <td><input type="text" name="net_weight_in_kg" value="<?= $row['net_weight_in_kg'] ?>" class="form-control"></td>
                                     <td><button class="btn btn-warning" name="btn_edit_p" value="<?= $row['product_id'] ?>" type="submit">Edit</button><input type="hidden" name="hiddenProductID" value="<?= $row['product_id'] ?>"></td>
-                                    
+
                                 </tr>
                             </form>
                     <?php }
