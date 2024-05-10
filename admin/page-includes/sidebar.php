@@ -122,6 +122,13 @@
 
   <?php } ?>
 
+  <?php if ($_SESSION['user_info']['role'] == 5 || $_SESSION['user_info']['role'] == 3 || $_SESSION['user_info']['role'] == 2) { ?>
+    <a href="payslip.php" class="nav-link d-flex align-items-center">
+      <i class="fa-solid fa-peso-sign"></i>
+      <p class="my-2 px-2">Employee Payslip</p>
+    </a>
+  <?php } ?>
+
   <a type="button" class="nav-link d-flex align-items-center text-danger" id="logout" data-bs-toggle="modal" data-bs-target="#LogoutModal">
     <i class="fa-solid fa-power-off"></i>
     <p class="my-2 px-2">Logout</p>

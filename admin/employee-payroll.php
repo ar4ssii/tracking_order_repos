@@ -18,6 +18,13 @@ $res_FetchEmployeePayroll = $conn->query($sql_FetchEmployeePayroll);
 
 <!-- Page content -->
 <div class="main">
+    <?php if (isset($_SESSION['AlertMsg'])) { ?>
+        <div class="alert <?= $_SESSION['AlertColor'] ?> fade show" role="alert">
+            <?= $_SESSION['AlertMsg'] ?>
+
+        </div>
+    <?php }
+    unset($_SESSION['AlertMsg']); ?>
     <form action="config/print_payslip.php" method="post">
         <div class="container-fluid bg-light p-3">
             <h3 class="text-center">Employee Payroll</h3>
@@ -91,13 +98,6 @@ $res_FetchEmployeePayroll = $conn->query($sql_FetchEmployeePayroll);
                                 <label for="">Salary per Hour:</label>
                                 <div class="input-group">
                                     <input type="text" name="SalaryPerHour" id="SalaryPerHour" value="<?= number_format($employeePayroll['job_salary'], 2) ?>" readonly class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="mb-2">
-                                <label for="">13th Month Pay:</label>
-                                <div class="input-group">
-                                    <input type="text" name="Thirteenth" id="Thirteenth" required class="form-control">
                                 </div>
                             </div>
 
@@ -240,13 +240,12 @@ $res_FetchEmployeePayroll = $conn->query($sql_FetchEmployeePayroll);
         var pagibig = parseFloat(document.getElementById("Pagibig").value) || 0;
         var sss = parseFloat(document.getElementById("SSS").value) || 0;
 
-        var Thirteenth = parseFloat(document.getElementById("Thirteenth").value) || 0;
 
         // Compute total deduction
         var totalDeduction = (numOfAbsent * absentRate) + philhealth + pagibig + sss;
 
         // Compute total salary
-        var grossPay = parseFloat(document.getElementById("GrossPay").value) + Thirteenth;
+        var grossPay = parseFloat(document.getElementById("GrossPay").value);
         var totalSalary = grossPay - totalDeduction;
 
         // Set values for total deduction and total salary inputs

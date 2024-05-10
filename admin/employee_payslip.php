@@ -1,6 +1,6 @@
 <?php
 include "template/header.php";
-include 'validation/employee-validation.php';
+
 include "page-includes/sidebar.php";
 include "page-includes/navbar.php";
 
@@ -10,7 +10,7 @@ $fetch_TotalSalary = "
 SELECT 
 ts.total_gross, ts.total_deduction,ts.total_salary,
 tp.reference_number, tp.StartDate, tp.EndDate, tp.PayrollType,
-sd.basic_salary,sd.thirteenth_month_pay,sd.overtime_hours,sd.regular_overtime_rate,
+sd.basic_salary,sd.overtime_hours,sd.regular_overtime_rate,
 dd.absent_count,dd.absent_rate,dd.philhealth,dd.sss,dd.pagibig,
 ei.firstname,ei.middlename,ei.lastname,ei.employee_id,
 j.job_title, j.department, j.job_salary
@@ -82,10 +82,6 @@ $result = mysqli_query($conn, $fetch_TotalSalary);
                     <tr>
                         <td class="tr-title">Basic Salary:</td>
                         <td><?= number_format($row['basic_salary'], 2) ?></td>
-                    </tr>
-                    <tr>
-                        <td class="tr-title">13th Month Pay:</td>
-                        <td><?= number_format($row['thirteenth_month_pay'], 2) ?></td>
                     </tr>
                     <tr>
                         <td class="tr-title">Overtime Hours:</td>

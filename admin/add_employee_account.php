@@ -260,6 +260,7 @@ if (isset($_SESSION['form_values'])) {
                                 <option value="1" <?php if ($login_role_id == '1') echo 'selected'; ?>>ADMIN</option>
                                 <option value="2" <?php if ($login_role_id == '2') echo 'selected'; ?>>STAFF</option>
                                 <option value="3" <?php if ($login_role_id == '3') echo 'selected'; ?>>RIDER</option>
+                                <option value="5" <?php if ($login_role_id == '5') echo 'selected'; ?>>EMPLOYEE</option>
                             </select>
                         </div>
                     </div>
