@@ -66,6 +66,7 @@ $result = $conn->query($sql_FetchEmployee);
                     <tr>
                         <th>#</th>
                         <th>Employee Name</th>
+                        <th>Username</th>
                         <th>Password</th>
                         <th>Login Role</th>
                         <th colspan="">Action</th>
@@ -83,6 +84,7 @@ $result = $conn->query($sql_FetchEmployee);
                             <tr>
                                 <td><?= $count++; ?></td>
                                 <td><?= $employeeName; ?></td>
+                                <td><?= $row['username'] ?></td>
                                 <td>********</td>
                                 <td><?= $row["login_role"]; ?></td>
                                 <td>

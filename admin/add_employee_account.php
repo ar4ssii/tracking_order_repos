@@ -236,7 +236,7 @@ if (isset($_SESSION['form_values'])) {
                         </div>
                     </div>
                     <div class="col">
-                        <label for="">Job Salary:</label>
+                        <label for="">Job Salary Per Hour:</label>
                         <div class="input-group">
                             <input type="text" required name="job_salary" value="<?= $job_salary ?>" class="form-control">
                         </div>
@@ -268,13 +268,13 @@ if (isset($_SESSION['form_values'])) {
                     <div class="col">
                         <label for="">Create Password:</label>
                         <div class="input-group">
-                            <input type="text" name="password" required class="form-control">
+                            <input type="password" name="password" required class="form-control">
                         </div>
                     </div>
                     <div class="col">
                         <label for="">Confirm Password:</label>
                         <div class="input-group">
-                            <input type="text" name="confirm_password" required class="form-control">
+                            <input type="password" name="confirm_password" required class="form-control">
                         </div>
                     </div>
                 </div>

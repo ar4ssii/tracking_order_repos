@@ -37,7 +37,7 @@ if ($result->num_rows > 0) {
             // Fetch and display employee information
             $sql_FetchPayroll_List = "
         SELECT 
-            ts.TotalSalary_id, ts.total_salary, ei.employee_id, ei.firstname, ei.middlename, ei.lastname
+            ts.TotalSalary_id, ts.total_gross,ts.total_deduction,ts.total_salary, ei.employee_id, ei.firstname, ei.middlename, ei.lastname
         FROM 
             `tbl_payroll` tp 
         INNER JOIN total_salary ts ON ts.payroll_id = tp.payroll_id
@@ -47,13 +47,14 @@ if ($result->num_rows > 0) {
         ";
             $res = $conn->query($sql_FetchPayroll_List);
             ?>
-
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Employee Number</th>
                             <th>Employee Name</th>
+                            <th>Gross Pay</th>
+                            <th>Deductions</th>
                             <th>Total Salary</th>
                             <th>Actions</th>
                         </tr>
@@ -66,6 +67,8 @@ if ($result->num_rows > 0) {
                                 <tr>
                                     <td><?= 'EMP' . $payroll_List['employee_id'] ?></td>
                                     <td><?= $FullName ?></td>
+                                    <td><?= number_format($payroll_List['total_gross'], 2) ?></td>
+                                    <td><?= number_format($payroll_List['total_deduction'], 2) ?></td>
                                     <td><?= number_format($payroll_List['total_salary'], 2) ?></td>
                                     <td>
                                         <a type="button" href="employee_payslip.php?id=<?= $payroll_List['TotalSalary_id'] ?>" class="btn btn-info"><i class="fa-solid fa-eye"></i></a>

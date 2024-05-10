@@ -22,8 +22,8 @@ $res_FetchEmployeePayroll = $conn->query($sql_FetchEmployeePayroll);
         <div class="container-fluid bg-light p-3">
             <h3 class="text-center">Employee Payroll</h3>
             <br>
-            <input type="text" name="employeeKeyID" value="<?= $_GET['id'] ?>" id="employeeKeyID">
-            <input type="text" name="presentDays" id="presentDays">
+            <input type="hidden" name="employeeKeyID" value="<?= $_GET['id'] ?>" id="employeeKeyID">
+            <input type="hidden" name="presentDays" id="presentDays">
             <?php
             if (mysqli_num_rows($res_FetchEmployeePayroll) > 0) {
                 // Loop through each row of data
@@ -111,7 +111,7 @@ $res_FetchEmployeePayroll = $conn->query($sql_FetchEmployeePayroll);
                                 <div class="col">
                                     <label for="">Overtime Rate:</label>
                                     <div class="input-group">
-                                        <input type="text" name="OvertimeRate" id="OTRate" class="form-control">
+                                        <input type="text" name="OvertimeRate" readonly id="OTRate" class="form-control">
                                     </div>
                                 </div>
                             </div>
