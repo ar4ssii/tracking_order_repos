@@ -53,8 +53,8 @@ if (isset($_POST['btn-login'])) {
                 'college' => $fetch['college']
             ];
 
-            if($_SESSION['user_info']['role'] == 3){
-                header("Location: ../deliver.php");
+            if($_SESSION['user_info']['role'] == 3 || $_SESSION['user_info']['role'] == 5){
+                header("Location: ../user-attendance.php");
                 exit();
             }else{
                 header("Location: ../index.php");
